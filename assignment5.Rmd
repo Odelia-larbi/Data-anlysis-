@@ -157,16 +157,6 @@ distinct(flights,flights, airports$faa)
 ```
 
 
-## Extra practice questions. 
-
-- [b-1] Arrange only the destination airports located in the Eastern Time Zone (i.e., America/New_York) by the total number of flights. 
-
-
-- [b-2] Find the airports in the top 20 destinations (top20dest) that are in the Pacific Time Zone. Among them, what is the SOUTHERNMOST airport (with lowest latitude)? Again, make sure your output includes the name of this airport, not just the faa code. 
-
-
-- [b-3] Using only the 5 airports you found in PART2. Question 5, print a summary table showing the total number of flights arriving at each destination airport by the origin airport (i.e., EWR, JFK, or LGA) AND by carrier. Then, sort the table in the descending order of the total flight counts. What are the TWO origin-dest-airline combinations (e.g., EWR-ORD-UA) with the highest total flight counts based on your output? 
-
 
 
 
