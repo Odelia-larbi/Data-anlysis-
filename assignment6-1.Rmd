@@ -1,0 +1,128 @@
+---
+title: "QTM 150 Assignment 6"
+author: "Leave the author field empty. This is for anonymous grading."
+output:
+  pdf_document: default
+  html_document: default
+---
+
+## Due Oct 31 2024 THU 11:59 PM.
+
+- Submission: Please submit both the Rmarkdown file and the output .html file. The ChatGPT survey is included in this .Rmd file. Points will be deducted for dishonesty or lack of response to the ChatGPT survey.
+
+## Questions
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#ODELIA LARBI-AMOAH
+
+
+library(tidyverse)
+library(tidyverse)
+library(nycflights13)
+```
+
+
+## 1. Tidyr [2.5pts]
+[1] Using the edu_outcome.csv file uploaded on Canvas, reshape it into long form. In the reshaped dataset, you should observe the year and "out of school" variables. Each row should display the country name, year, and its corresponding out-of-school rate. *You should include the argument - names_prefix="outofschool_" - in the pivot function*. [2] Next, remove any rows with missing values in any of the variables. Save this long-form dataframe as *edu_long*. 
+
+```{r}
+
+edu_outcome<-read.csv("edu_outcome.csv") 
+
+edu_outcome %>% 
+  pivot_longer(cols = c("outofschool_2014","outofschool_2015","outofschool_2016","outofschool_2017","outofschool_2018","outofschool_2019","outofschool_2020","outofschool_2021"),names_to = "year", values_to = "outofschool" , names_prefix="outofschool_" ) %>%  
+  na.omit()
+
+
+
+
+
+
+
+```
+
+## 2. Join [2.5pts] 
+
+Researcher A seeks to explore how weather conditions at an origin (departing) airport affect the duration of departure delays. Using the nycflights13 dataset, she aims to answer her question.
+
+[1-1] (1.5pts) In doing so, she noticed the need to join two datasets: *flights* and *weather*. 
+
+- The *flights* dataset provides the specific date and time (`time_hour`) of a flight's departure and the flight's `origin` and `dest`. It also provides its departure delay time, `dep_delay`.
+- The *weather* dataset provides weather information for a specific date and time (`time_hour`) at the origin airport (`origin`). 
+
+* When using the join function, make sure to check if you have identified the appropriate primary dataset (x dataset), appropriate type of join function, and appropriate key variables. 
+
+After joining the two datasets, she filtered the data to include only observations where the `wind_speed` at the origin airport is *greater than or equal* to the overall *median* wind speed (make sure to include "na.rm=T"). Then, she calculated the average departure delays by `time_hour` (make sure to include "na.rm=T"). She saved this result in a data frame named `above_median_wind`.
+
+Reproduce what she did. Ensure all steps are piped together.
+
+```{r}
+above_median_wind<-left_join(flights,weather,by=c("origin", "time_hour")) %>% 
+  filter(wind_speed >= median(wind_speed, na.rm = T)) %>% 
+  group_by(time_hour) %>% 
+  summarize(avg.delay= mean(dep_delay, na.rm = T))
+
+  above_median_wind
+  
+  
+  
+  
+
+```
+
+[1-2] (1pt) She repeated the same join operation and filtered the dataset to include only observations where the `wind_speed` at the origin airport is *below* the overall median wind speed. She then calculated the average departure delays by `time_hour`. She saved this result in a data frame named `below_median_wind`.
+
+```{r}
+below_median_wind<-left_join(flights,weather,by=c("origin", "time_hour")) %>% 
+    filter(wind_speed < median(wind_speed, na.rm = T)) %>% 
+  group_by(time_hour) %>% 
+  summarize(avg.delay= mean(dep_delay, na.rm = T))  
+
+below_median_wind
+
+
+
+```
+
+
+[Bonus 0.5pts, either full points or zero. no partial point will be given.] 
+
+[1-3] (0.5pts) Now she has two datasets with summary statistics: `above_median_wind` and `below_median_wind`. Using `above_median_wind`, she first plots the average departure delays (y variable) over time (x variable) with geom_line(). On top of this, she overlays the geom_line plot from the `below_median_wind` dataset using the same variables. Distinguish these two geom_line plots with different colors and reduce the alpha level to prevent one plot from obscuring the other.
+
+**Refer to Week 8. Review Exercises (Answer), especially [5-3] plotting part, second method, to get the hint of [1-3].**
+
+```{r}
+ggplot()+ 
+  geom_line(data=above_median_wind, aes(x=time_hour, y=avg.delay, color="above_median_wind"), alpha=.8)+
+  geom_line(data = below_median_wind, aes(x=time_hour, y=avg.delay, color=" below_median_wind"),alpha= .5)+
+  labs(x="Time",y=" Delays",title="Average Delays Over time")
+  
+
+
+
+```
+
+
+
+---
+### ChatGPT Survey 
+
+#### Question 1. Please indicate below whether you sought assistance from ChatGPT for your weekly assignment.
+>  YES or NO
+NO 
+
+#### Question 2. If YES, describe the questions you posed to ChatGPT and the responses you received.
+
+> Type here Questions you asked
+
+> Type here Response you received
+
+> You can attach the screenshot here using this code: ![Your caption in this bracket]()
+
+
+#### Question 3. Describe any modifications or original contributions you added to the ChatGPT-generated answers to complete the assignment.
+
+> Type here your contribution you added.
+

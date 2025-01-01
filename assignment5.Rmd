@@ -1,0 +1,192 @@
+---
+title: "QTM 150 Assignment 5"
+author: "Leave the author field empty. This is for anonymous grading."
+output: html_document
+---
+
+## Due Oct 24 2024 THU 11:59 PM.
+
+- Submission: Please submit both the Rmarkdown file and the output .html file. The ChatGPT survey is included in this .Rmd file. Points will be deducted for dishonesty or lack of response to the ChatGPT survey.
+
+## Questions
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#Odelia Larbi-Amoah 
+
+#install.packages("nycflights13")
+library(nycflights13)
+library(tidyverse)
+```
+
+
+```{r, eval=FALSE}
+str(airlines)
+str(airports)
+str(flights)
+str(planes)
+str(weather)
+
+
+#?airlines
+#?airports
+#?flights
+#?planes
+#?weather
+```
+
+## INSTRUCTION (PLEASE READ THIS CAREFULLY)
+After installing and loading the nycflights13 package, you'll have access to five different datasets: airlines, airports, flights, planes, and weather. Please answer the questions using these datasets. Ensure that all answers are written using the *pipe operator*.
+
+In this assignment, to answer the questions correctly, it's crucial to understand which variable is in which dataset and what each variable represents. You will need to reference each dataset repeatedly to answer the questions.
+
+Also, note that faa variable in airports (`aiports$faa`) and  origin & dest variable in flights (`flights$origin` `flights$dest`) indicate the airport code name.  
+
+
+## PART1. Answer the question using flights dataset. [1.5 pts]
+- [0] flights dataset contains information on all flights *from* three airports in New York City (NYC) to various destinations during 2013. Each row represents an individual flight operation in 2013. 
+
+- [1] Find the total number of flights for each destination airport. (0.5 pts)
+
+```{r}
+flights %>%
+  count(dest)
+
+```
+
+- [2] Find the TOP 20 destination airports and their total number of flights. Print out this table.  (0.7 pts)
+
+```{r}
+flights %>%
+  count(dest) %>% 
+  arrange(desc(dest)) %>% 
+  top_n(20,dest)
+
+
+```
+
+- [3] Then save this new data frame as *top20dest* (0.3 pts)
+
+```{r}
+top20dest<- flights %>%
+  count(dest) %>% 
+  arrange(desc(dest)) %>% 
+  top_n(20,n)
+                
+top20dest
+```
+## PART2. Answer the questions using top20dest, airports, flights. [3.5 pts]
+- [0] airports dataset includes details on every US airport, such as FAA code, name, latitude, longitude, time zone, and more. 
+
+- [1] Print a table showing the number of destination airports (shown in flights dataset) by each time zone. (0.7 pts)
+
+```{r}
+airports %>% 
+  filter(faa %in% flights$dest) %>% 
+  count(tzone)
+
+airports %>% 
+  filter(faa %in% flights$dest)
+
+
+```
+
+
+- [2] How many of the top 20 destinations are located in the Central Time Zone (i.e., America/Chicago )? Hint: Use the column `dest` in `top20dest` dataset. (0.7 pts)
+
+```{r}
+airports %>% 
+  filter(tzone=="America/Chicago", faa %in% top20dest$dest) %>% 
+  count()
+  
+```
+
+
+- [3] What are the names of these airports located in the Central Time Zone? (i.e.,"America/Chicago") (0.7 pts)
+
+```{r}
+airports %>% 
+  filter(tzone=="America/Chicago", faa %in% top20dest$dest) %>% 
+  select(name)
+  
+  
+ flights %>% 
+   filter(faa %in% flights$dest) %>% 
+   setdiff(faa, flights$dest)
+
+
+```
+
+- [4] i.  What are the TOP 5 airports in the Eastern Time Zone (America/New_York), in terms of the total number of flights? 
+
+ii. Once you find the top5 airports in the Eastern Time Zone, write the separate code that identifies the names of these 5 airports, not just the faa codes. (Hint: For ii., you need to look at airports dataset.) (0.7 pts)
+```{r}
+Etzone<-airports %>% 
+  filter(tzone=="America/New_York") 
+  
+topeast<-flights %>% 
+  filter( dest %in% Etzone$faa) %>% 
+  count(dest) %>% 
+  arrange(desc(dest)) %>% 
+  top_n(5,n)
+
+airports %>% 
+  filter(faa %in% topeast$dest) %>% 
+  select(name)
+
+
+```
+
+
+- [5] Of the airports listed in *top20dest*, which destination airports have the HIGHEST number of distinct airline carriers flying to them? There should be FIVE airports with 7 airlines each. Save these top five destinations with the most airlines into an object called "top5". Print "top5"  [0.7 pts]
+
+```{r}
+top5<-flights %>% 
+  filter(dest %in% top20dest$dest) %>% 
+  group_by(dest) %>% 
+  summarize(carrier2=n_distinct(carrier)) %>% 
+  arrange(desc(carrier2)) %>% 
+  top_n(5)
+  
+print(top5)
+  
+
+
+distinct(flights,flights, airports$faa)
+
+```
+
+
+## Extra practice questions. 
+
+- [b-1] Arrange only the destination airports located in the Eastern Time Zone (i.e., America/New_York) by the total number of flights. 
+
+
+- [b-2] Find the airports in the top 20 destinations (top20dest) that are in the Pacific Time Zone. Among them, what is the SOUTHERNMOST airport (with lowest latitude)? Again, make sure your output includes the name of this airport, not just the faa code. 
+
+
+- [b-3] Using only the 5 airports you found in PART2. Question 5, print a summary table showing the total number of flights arriving at each destination airport by the origin airport (i.e., EWR, JFK, or LGA) AND by carrier. Then, sort the table in the descending order of the total flight counts. What are the TWO origin-dest-airline combinations (e.g., EWR-ORD-UA) with the highest total flight counts based on your output? 
+
+
+
+
+---
+### ChatGPT Survey 
+
+#### Question 1. Please indicate below whether you sought assistance from ChatGPT for your weekly assignment.
+>  YES or NO
+NO
+
+#### Question 2. If YES, describe the questions you posed to ChatGPT and the responses you received.
+
+> Type here Questions you asked
+
+> Type here Response you received
+
+> You can attach the screenshot here using this code: ![Your caption in this bracket]()
+
+
+#### Question 3. Describe any modifications or original contributions you added to the ChatGPT-generated answers to complete the assignment.
+
+> Type here your contribution you added.
+

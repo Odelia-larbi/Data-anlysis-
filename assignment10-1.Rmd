@@ -1,0 +1,67 @@
+---
+title: "QTM 150 Assignment 10"
+author: "Leave the author field empty. This is for anonymous grading."
+output: html_document
+---
+
+## Due Nov 28 2024 THU 11:59 PM.
+
+- Submission: Please submit both the Rmarkdown file and the output .html file. The ChatGPT survey is included in this .Rmd file. Points will be deducted for dishonesty or lack of response to the ChatGPT survey.
+
+## Questions
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(anyflights)
+library(plotly)
+library(tidyverse)
+
+#ODELIA LAEBI-AMOAH
+```
+
+# Plotly (5pts)
+
+Use the below dataset *df*. This dataset represents bottom 10 carriers' weekly number of flights departing from BNA in January 2020. 
+```{r}
+df <- read.csv("bna.csv") %>% 
+  mutate(week=week(time_hour)) %>%
+  group_by(week, carrier) %>%
+  count() %>%
+  ungroup() %>% # need to ungroup to regroup by "week" alone.
+  group_by(week) %>% 
+  top_n(-10) %>% ungroup() # need to ungroup the dataset for the next data manipulation. 
+df
+
+```
+Write the code to create a Plotly object -- a line graph depicting the dataset 'df', with 'week' as the x-variable and 'n' as the y-variable. The first trace should be a line graph where different carriers are represented by distinct colors, and the line opacity is set to 0.5. Then, overlay another line graph representing only the carrier "B6" in red color, with the carrier's name clearly displayed in the legend. Lastly, add text (not annotations) displaying the value of "n" at those data points which have the highest 'n' in a given week.
+
+
+
+```{r}
+# Write a user-defined function that takes a plot as an input.
+
+#get that b6 line in red 
+B_6<- function(plot){
+  plot %>% filter(carrier== "B6") %>%  add_lines(name="B6", color=I("red"))
+}
+
+#try writting the code for max points again 
+maxpoints_data<- df %>% 
+  group_by(week) %>% 
+  filter(n==max(n)) %>% 
+  ungroup 
+
+#Start Plotting 
+finished<- plot_ly(data=df, x=~week, y=~n, color = ~carrier) %>% 
+  add_lines(name="Carriers", alpha=I(.5)) %>% #trace one 
+  add_fun(B_6) %>% #trace 2 
+  add_text(data = maxpoints_data, x=~week, y=~n, text=~paste("max:",n))#trace 3 with the max 
+ 
+finished
+
+
+
+```
+
+
+

@@ -1,0 +1,94 @@
+---
+title: "QTM 150 Assignment 7"
+author: "Leave the author field empty. This is for anonymous grading."
+output:
+  pdf_document: default
+  html_document: default
+---
+
+## Due Nov 7 2024 THU 11:59 PM.
+
+- Submission: Please submit both the Rmarkdown file and the output .html file. The ChatGPT survey is included in this .Rmd file. Points will be deducted for dishonesty or lack of response to the ChatGPT survey.
+
+## Questions
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#ODELIA LARBI-AMOAH
+
+
+library(tidyverse)
+library(nycflights13)
+
+```
+
+
+## Lubridate [5pts]
+
+In the original flights dataset, the date and time components spread across multiple columns.
+Researcher A aims to assemble them into a single date-time variable. Using the function mentioned above (make_datetime_100), she updates the variables in flights dataset `dep_time`, `sched_dep_time`, `arr_time`, and `sched_arr_time` into a date-time format. She saved this dataframe as *flights_hw*. 
+
+```{r}
+# use the given code as it is. Don't modify the code. 
+
+make_datetime_100 <- function(year, month, day, time) {
+  make_datetime(year, month, day, time %/% 100, time %% 100)
+}
+
+flights_hw <- flights %>% 
+  mutate(
+    dep_time = make_datetime_100(year, month, day, dep_time),
+    arr_time = make_datetime_100(year, month, day, arr_time),
+    sched_dep_time = make_datetime_100(year, month, day, sched_dep_time),
+    sched_arr_time = make_datetime_100(year, month, day, sched_arr_time)
+  ) 
+
+```
+
+Using *flights_hw* dataset, she creates a new variable named *week*. In this new variable, she extracts *the week of the year* from the updated *sched_arr_time*. She then narrows down the observations to only those where the destination is "ATL" or "LAX". 
+
+Finally, she produces a bar graph (geom_bar) to count the number of flights per week, with bars colored based on the destination: ATL or LAX. The bars are set side by side using the option position="dodge". 
+
+** All steps above must be piped together. 
+
+ 
+```{r}
+
+flights_hw %>% 
+  mutate(week=week(sched_arr_time)) %>%
+  filter(dest== "ATL"| dest=="LAX" ) %>% 
+  ggplot(aes(x=week, fill= dest))+
+  geom_bar( position="dodge")+ 
+  scale_fill_manual(values = c("slateblue2", "orchid"))
+  
+  
+  
+  
+  
+  
+
+```
+
+
+
+---
+### ChatGPT Survey 
+
+#### Question 1. Please indicate below whether you sought assistance from ChatGPT for your weekly assignment.
+>  YES or NO 
+NO 
+
+
+#### Question 2. If YES, describe the questions you posed to ChatGPT and the responses you received.
+
+> Type here Questions you asked
+
+> Type here Response you received
+
+> You can attach the screenshot here using this code: ![Your caption in this bracket]()
+
+
+#### Question 3. Describe any modifications or original contributions you added to the ChatGPT-generated answers to complete the assignment.
+
+> Type here your contribution you added.
+
