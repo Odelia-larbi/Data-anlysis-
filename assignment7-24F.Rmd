@@ -71,24 +71,3 @@ flights_hw %>%
 
 
 
----
-### ChatGPT Survey 
-
-#### Question 1. Please indicate below whether you sought assistance from ChatGPT for your weekly assignment.
->  YES or NO 
-NO 
-
-
-#### Question 2. If YES, describe the questions you posed to ChatGPT and the responses you received.
-
-> Type here Questions you asked
-
-> Type here Response you received
-
-> You can attach the screenshot here using this code: ![Your caption in this bracket]()
-
-
-#### Question 3. Describe any modifications or original contributions you added to the ChatGPT-generated answers to complete the assignment.
-
-> Type here your contribution you added.
-
